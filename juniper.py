@@ -15,6 +15,7 @@ import ollama
 
 import meshtastic
 import meshtastic.serial_interface
+
 from pubsub import pub
 
 #
@@ -23,6 +24,10 @@ SIZE = 180
 LOGBACK = 4
 
 LOG_FILE = "juniper.log"
+
+ENABLE_IP_TUNNELLING = False
+
+#
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(filename=LOG_FILE, level=logging.INFO, format="%(asctime)s %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
@@ -82,9 +87,15 @@ def split_on_word_boundary(text, size):
             yield text[start:space_index]
             start = space_index + 1
 
+if ENABLE_IP_TUNNELLING:
+    import threading
+    import meshtastic.tunnel
+    threading.Thread(lambda: meshtastic.tunnel.Tunnel(interface)).start()
+
 logger.info("Juniper server started")
 
 pub.subscribe(onReceive, "meshtastic.receive.text")
 
 while True:
     time.sleep(1)
+
