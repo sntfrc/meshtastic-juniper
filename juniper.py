@@ -8,6 +8,7 @@
 # Then prepare ollama model with: ollama create juniper -f Modelfile.juniper
 #
 
+import sys
 import time
 import logging
 
@@ -24,8 +25,6 @@ SIZE = 180
 LOGBACK = 4
 
 LOG_FILE = "juniper.log"
-
-ENABLE_IP_TUNNELLING = False
 
 #
 
@@ -87,7 +86,7 @@ def split_on_word_boundary(text, size):
             yield text[start:space_index]
             start = space_index + 1
 
-if ENABLE_IP_TUNNELLING:
+if "--tunnel" in sys.argv:
     import threading
     import meshtastic.tunnel
     threading.Thread(lambda: meshtastic.tunnel.Tunnel(interface)).start()
