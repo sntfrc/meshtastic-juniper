@@ -1,0 +1,16 @@
+[Unit]
+Description=Meshtastic on-mesh LLM chatbot
+After=ollama.service
+Requires=ollama.service
+
+[Service]
+ExecStartPre=/usr/local/bin/ollama run juniper answer_with_ok --keepalive=-1m
+ExecStart=/opt/meshtastic/bin/python3 /opt/meshtastic/juniper/juniper.py
+WorkingDirectory=/opt/meshtastic/juniper
+Restart=on-failure
+User=sntfrc
+RestartSec=10
+StartLimitBurst=5
+
+[Install]
+WantedBy=multi-user.target
