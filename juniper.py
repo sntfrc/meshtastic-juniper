@@ -89,7 +89,7 @@ def split_on_word_boundary(text, size):
 if "--tunnel" in sys.argv:
     import threading
     import meshtastic.tunnel
-    threading.Thread(lambda: meshtastic.tunnel.Tunnel(interface)).start()
+    threading.Thread(target=lambda: meshtastic.tunnel.Tunnel(interface)).start()
 
 logger.info("Juniper server started")
 
